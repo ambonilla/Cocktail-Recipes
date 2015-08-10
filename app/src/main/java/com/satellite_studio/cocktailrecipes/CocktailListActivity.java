@@ -34,7 +34,7 @@ import java.io.OutputStream;
 public class CocktailListActivity extends FragmentActivity
         implements CocktailListFragment.Callbacks {
 
-    DBAdapter db;
+
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -42,40 +42,12 @@ public class CocktailListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
 
-    public void GetCocktails(){
-        db.openDataBase();
-        Cursor c = db.getAllCocktails();
-
-        if(c.moveToFirst()){
-            do{
-                Log.e("COCKTAILS!", c.getString(0));
-            }
-            while(c.moveToNext());
-        }
-
-        db.close();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cocktail_list);
 
-        db = new DBAdapter(this);
-        try {
-            db.createDatabase();
-            db.openDataBase();
-        }
-        catch(IOException e){
-            Log.e("MAIN Create DB","Can't create DB");
-            e.printStackTrace();
-        }
-        catch (SQLiteException e){
-            Log.e("MAIN Open DB","Can't open DB");
-            e.printStackTrace();
-        }
-
-        GetCocktails();
 
         if (findViewById(R.id.cocktail_detail_container) != null) {
             // The detail container view will be present only in the
@@ -101,24 +73,43 @@ public class CocktailListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(String name) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
+            /*
             Bundle arguments = new Bundle();
-            arguments.putString(CocktailDetailFragment.ARG_ITEM_ID, id);
+            arguments.putString(CocktailDetailFragment.ARG_POSITION, id);
             CocktailDetailFragment fragment = new CocktailDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.cocktail_detail_container, fragment)
                     .commit();
+            */
+
+            CocktailDetailFragment cocktailDetailFragment = (CocktailDetailFragment) getSupportFragmentManager().findFragmentById(R.id.cocktail_detail);
+            if(cocktailDetailFragment != null) {
+                cocktailDetailFragment.updatedArticleView(name);
+            }
+            else {
+                CocktailDetailFragment swapFragment = new CocktailDetailFragment();
+                Bundle args = new Bundle();
+                args.putString(CocktailDetailFragment.ARG_POSITION, name);
+                swapFragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.cocktail_detail_container, swapFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+
 
         } else {
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, CocktailDetailActivity.class);
-            detailIntent.putExtra(CocktailDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(CocktailDetailFragment.ARG_POSITION, name);
             startActivity(detailIntent);
         }
     }

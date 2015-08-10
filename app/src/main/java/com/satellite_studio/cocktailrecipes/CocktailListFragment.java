@@ -1,13 +1,22 @@
 package com.satellite_studio.cocktailrecipes;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.satellite_studio.cocktailrecipes.cocktails.CocktailItem;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A list fragment representing a list of Cocktails. This fragment
@@ -20,6 +29,9 @@ import com.satellite_studio.cocktailrecipes.cocktails.CocktailItem;
  */
 public class CocktailListFragment extends ListFragment {
 
+    private List<CocktailItem> mItems;
+    DBAdapter db;
+
     /**
      * The serialization (saved instance state) Bundle key representing the
      * activated item position. Only used on tablets.
@@ -30,7 +42,7 @@ public class CocktailListFragment extends ListFragment {
      * The fragment's current callback object, which is notified of list item
      * clicks.
      */
-    private Callbacks mCallbacks = sDummyCallbacks;
+    Callbacks mCallbacks;
 
     /**
      * The current activated item position. Only used on tablets.
@@ -46,18 +58,10 @@ public class CocktailListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(String name);
     }
 
-    /**
-     * A dummy implementation of the {@link Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onItemSelected(String id) {
-        }
-    };
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,16 +70,44 @@ public class CocktailListFragment extends ListFragment {
     public CocktailListFragment() {
     }
 
+    public void GetCocktails(){
+        db.openDataBase();
+        Cursor c = db.getAllCocktails();
+
+        if(c.moveToFirst()){
+            do{
+                mItems.add(new CocktailItem(c.getString(0)));
+            }
+            while(c.moveToNext());
+        }
+
+        db.close();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<CocktailItem.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                CocktailItem.ITEMS));
+        mItems = new ArrayList<CocktailItem>();
+        Context currCtx = getActivity();
+        db = new DBAdapter(currCtx);
+        try {
+            db.createDatabase();
+            db.openDataBase();
+        }
+        catch(IOException e){
+            Log.e("MAIN Create DB","Can't create DB");
+            e.printStackTrace();
+        }
+        catch (SQLiteException e){
+            Log.e("MAIN Open DB","Can't open DB");
+            e.printStackTrace();
+        }
+        GetCocktails();
+
+        CocktailAdapter cocktailAdapter = new CocktailAdapter(currCtx, mItems);
+
+        setListAdapter(cocktailAdapter);
     }
 
     @Override
@@ -106,7 +138,7 @@ public class CocktailListFragment extends ListFragment {
         super.onDetach();
 
         // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
+        //mCallbacks = cocktailCallbacks;
     }
 
     @Override
@@ -115,7 +147,11 @@ public class CocktailListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(CocktailItem.ITEMS.get(position).id);
+        //mCallbacks.onItemSelected(mItems.get(position).id);
+        mCallbacks.onItemSelected(mItems.get(position).name);
+        //PresidentViewItem pres = mItems.get(position);
+        view.setSelected(true);
+        listView.setItemChecked(position,true);
     }
 
     @Override

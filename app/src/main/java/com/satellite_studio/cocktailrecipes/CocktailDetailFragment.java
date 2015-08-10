@@ -1,11 +1,15 @@
 package com.satellite_studio.cocktailrecipes;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.satellite_studio.cocktailrecipes.cocktails.CocktailItem;
 
@@ -20,42 +24,70 @@ public class CocktailDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_POSITION = "position";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private CocktailItem.DummyItem mItem;
+    private String currentPosition = "";
+    private String cocktailDescription = "";
+    private String cocktailIngredients = "";
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public CocktailDetailFragment() {
-    }
+    DBAdapter db;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = CocktailItem.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_cocktail_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.cocktail_detail)).setText(mItem.content);
+        if(savedInstanceState != null) {
+            currentPosition = savedInstanceState.getString(ARG_POSITION);
+        }
+        return rootView;
+    }
+
+    public void getCocktailData(String cocktailName){
+        Context currCtx = getActivity();
+        db = new DBAdapter(currCtx);
+        db.openDataBase();
+        Cursor c = db.getCocktail(cocktailName);
+
+        if(c.moveToFirst()){
+            do{
+                cocktailDescription = c.getString(2);
+                cocktailIngredients = c.getString(1);
+            }
+            while(c.moveToNext());
         }
 
-        return rootView;
+        db.close();
+    }
+
+    public void updatedArticleView(String name){
+        View v = getView();
+        getCocktailData(name);
+
+        TextView description = (TextView) v.findViewById(R.id.cocktail_detail);
+
+
+        description.setText("Ingredients:\n\n" + cocktailIngredients + "\n\nPreparation:\n\n" + cocktailDescription);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Bundle args = getArguments();
+        if(args != null){
+            //set the article based on the argument passed in
+            updatedArticleView(args.getString(ARG_POSITION));
+        }
+        //else set the article based on the saved instance state defined during onCreateView
+        else if(currentPosition.length() > 0){
+            updatedArticleView(currentPosition);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ARG_POSITION, currentPosition);
     }
 }
