@@ -21,9 +21,9 @@ public class CocktailDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cocktail_detail);
-
         // Show the Up button in the action bar.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -38,6 +38,9 @@ public class CocktailDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
+
+            setTitle(getIntent().getStringExtra(CocktailDetailFragment.ARG_POSITION));
+
             arguments.putString(CocktailDetailFragment.ARG_POSITION,
                     getIntent().getStringExtra(CocktailDetailFragment.ARG_POSITION));
             CocktailDetailFragment fragment = new CocktailDetailFragment();
