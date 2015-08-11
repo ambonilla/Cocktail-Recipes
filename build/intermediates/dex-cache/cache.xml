@@ -2,18 +2,18 @@
 <items version="2" >
 
     <item
-        jar="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/pre-dexed/debug/classes-b230896743dbaf6c4a3797e9beffd38331583249.jar" />
-    </item>
-    <item
         jar="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
         <dex dex="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/pre-dexed/debug/classes-e459a9b14452419e1534fa8396fd2cf3bbc0265a.jar" />
+    </item>
+    <item
+        jar="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-dcd75f3197e5a77e3c9ef483d2c510b0d94cb4cd.jar" />
     </item>
     <item
         jar="/Users/antiadriano/Library/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
@@ -23,11 +23,11 @@
         <dex dex="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-00f1c5f53e689d289c274f0dc1d4654272c37c44.jar" />
     </item>
     <item
-        jar="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
+        jar="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-dcd75f3197e5a77e3c9ef483d2c510b0d94cb4cd.jar" />
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="/Users/antiadriano/Documents/CocktailRecipes/app/build/intermediates/pre-dexed/debug/classes-b230896743dbaf6c4a3797e9beffd38331583249.jar" />
     </item>
 
 </items>

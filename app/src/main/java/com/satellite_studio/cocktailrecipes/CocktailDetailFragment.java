@@ -66,9 +66,10 @@ public class CocktailDetailFragment extends Fragment {
         getCocktailData(name);
 
         TextView description = (TextView) v.findViewById(R.id.cocktail_detail);
+        TextView ingredients = (TextView) v.findViewById(R.id.cocktail_ingredients);
 
-
-        description.setText("Ingredients:\n\n" + cocktailIngredients + "\n\nPreparation:\n\n" + cocktailDescription);
+        ingredients.setText(cocktailIngredients);
+        description.setText(cocktailDescription);
     }
 
     @Override
