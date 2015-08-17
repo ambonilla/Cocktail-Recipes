@@ -36,8 +36,14 @@ public class CocktailAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View currView = convertView;
         ViewHolder viewHolder;
+        float oddOrEven = (float) position % 2;
         if (currView == null){
-            currView = mLayoutInflater.inflate(R.layout.cocktail_row, parent, false);
+            if(oddOrEven > 0) {
+                currView = mLayoutInflater.inflate(R.layout.cocktail_row, parent, false);
+            }
+            else{
+                currView = mLayoutInflater.inflate(R.layout.cocktail_row_even, parent, false);
+            }
             viewHolder = new ViewHolder();
             viewHolder.cocktailName = (TextView) currView.findViewById(R.id.cocktail_name);
             currView.setTag(viewHolder);

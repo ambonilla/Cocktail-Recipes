@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.satellite_studio.cocktailrecipes.cocktails.CocktailItem;
+
+import org.w3c.dom.Text;
 
 /**
  * A fragment representing a single Cocktail detail screen.
@@ -65,9 +68,11 @@ public class CocktailDetailFragment extends Fragment {
         View v = getView();
         getCocktailData(name);
 
+        TextView cocktailName = (TextView) v.findViewById(R.id.cocktail_title);
         TextView description = (TextView) v.findViewById(R.id.cocktail_detail);
         TextView ingredients = (TextView) v.findViewById(R.id.cocktail_ingredients);
 
+        cocktailName.setText(name);
         ingredients.setText(cocktailIngredients);
         description.setText(cocktailDescription);
     }
